@@ -513,15 +513,17 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             //NSLog(@"video requestMediaDataWhenReadyOnQueue begin");
             while( assetWriterVideoInput.readyForMoreMediaData && ! _paused )
             {
-                if( videoInputReadyCallback && ! videoInputReadyCallback() && ! videoEncodingIsFinished )
-                {
-                    runAsynchronouslyOnContextQueue(_movieWriterContext, ^{
-                        if( assetWriter.status == AVAssetWriterStatusWriting && ! videoEncodingIsFinished )
-                        {
-                            videoEncodingIsFinished = YES;
-                            [assetWriterVideoInput markAsFinished];
-                        }
-                    });
+                @autoreleasepool {
+                    if( videoInputReadyCallback && ! videoInputReadyCallback() && ! videoEncodingIsFinished )
+                    {
+                        runAsynchronouslyOnContextQueue(_movieWriterContext, ^{
+                            if( assetWriter.status == AVAssetWriterStatusWriting && ! videoEncodingIsFinished )
+                            {
+                                videoEncodingIsFinished = YES;
+                                [assetWriterVideoInput markAsFinished];
+                            }
+                        });
+                    }
                 }
             }
             //NSLog(@"video requestMediaDataWhenReadyOnQueue end");
