@@ -286,11 +286,13 @@
     {
         while (reader.status == AVAssetReaderStatusReading && (!_shouldRepeat || keepLooping))
         {
+            @autoreleasepool {
                 [weakSelf readNextVideoFrameFromOutput:readerVideoTrackOutput];
-
-            if ( (readerAudioTrackOutput) && (!audioEncodingIsFinished) )
-            {
+                
+                if ( (readerAudioTrackOutput) && (!audioEncodingIsFinished) )
+                {
                     [weakSelf readNextAudioSampleFromOutput:readerAudioTrackOutput];
+                }
             }
 
         }
