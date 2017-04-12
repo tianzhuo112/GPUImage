@@ -354,6 +354,11 @@
 
 - (void)outputMediaDataWillChange:(AVPlayerItemOutput *)sender
 {
+    if (![playerItemOutput hasNewPixelBufferForItemTime:CMTimeMake(1, 10)]) {
+        [_playerItem removeOutput:playerItemOutput];
+        [_playerItem addOutput:playerItemOutput];
+    }
+    
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	// Restart display link.
 	[displayLink setPaused:NO];
